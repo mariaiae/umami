@@ -178,16 +178,10 @@ if (MAKE_WEBHOOK_URL) {
         console.log("Respuesta del servidor de Make:", response.status); // <-- ESTO NOS DIRÁ SI MAKE RESPONDIÓ
     } catch (error) {
         console.error("Error al conectar con Make:", error); // <-- ESTO NOS DIRÁ SI FALLÓ LA RED
-    };
+    }
+}
 
-            try {
-            await fetch(MAKE_WEBHOOK_URL, { method: 'POST', body: JSON.stringify(payload) });
-        } catch (error) { 
-            console.error("Error enviando a webhook", error); 
-        }
-
-
-    // Generar texto automático para WhatsApp
+// Generar texto automático para WhatsApp
     let waText = `¡Hola Umami! Soy *${customerName}*, acabo de registrar un pedido.\n\n`;
     waText += "*Mi pedido:*\n";
     orderState.items.forEach(i => waText += `- ${i.quantity} x ${i.product}\n`);
