@@ -150,31 +150,35 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
         : "Estación Metro";
 
     // Opcional: Enviar a Make para registro en Excel
-    if (MAKE_WEBHOOK_URL) {
-        /*const payload = {
-            cliente: customerName,
-            telefono: document.getElementById('customerPhone').value,
-            entrega: deliveryMethod,
-            pago: paymentMethod,
-            total: orderState.total,
-            items: orderState.items
-        };*/
+   // Opcional: Enviar a Make para registro en Excel
+if (MAKE_WEBHOOK_URL) {
+    const payload = {
+        cliente: customerName,
+        telefono: document.getElementById('customerPhone').value,
+        entrega: deliveryMethod,
+        pago: paymentMethod,
+        total: orderState.total,
+        items: orderState.items,
+        cant_mora_150: orderState.items.find(i => i.product.includes("Mermelada 150"))?.quantity || 0,
+        cant_mora_250: orderState.items.find(i => i.product.includes("Mermelada 250"))?.quantity || 0,
+        cant_aji_150: orderState.items.find(i => i.product.includes("Ají maracuyá 150"))?.quantity || 0,
+        cant_aji_250: orderState.items.find(i => i.product.includes("Ají maracuyá 250"))?.quantity || 0,
+        chai_75: orderState.items.find(i => i.product.includes("Té chai 75"))?.quantity || 0,
+        chai_125: orderState.items.find(i => i.product.includes("Té chai 125"))?.quantity || 0
+    };
 
-        const payload = {
-                cliente: customerName,
-                telefono: document.getElementById('customerPhone').value,
-                entrega: deliveryMethod,
-                pago: paymentMethod,
-                total: orderState.total,
-                // Aquí incluimos las cantidades de cada producto para que coincidan con tu Excel
-                cant_mora_150: orderState.items.find(i => i.product.includes("Mermelada 150"))?.quantity || 0,
-                cant_mora_250: orderState.items.find(i => i.product.includes("Mermelada 250"))?.quantity || 0,
-                cant_aji_150: orderState.items.find(i => i.product.includes("Ají maracuyá 150"))?.quantity || 0,
-                cant_aji_250: orderState.items.find(i => i.product.includes("Ají maracuyá 250"))?.quantity || 0,
-                chai_75: orderState.items.find(i => i.product.includes("Té chai 75"))?.quantity || 0,
-                chai_125: orderState.items.find(i => i.product.includes("Té chai 125"))?.quantity || 0
-            };
-    }
+    console.log("Intentando enviar a Make este payload:", payload); // <-- ESTO NOS DIRÁ SI EL CÓDIGO EJECUTA EL ENVÍO
+
+    try {
+        const response = await fetch(MAKE_WEBHOOK_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload) 
+        });
+        console.log("Respuesta del servidor de Make:", response.status); // <-- ESTO NOS DIRÁ SI MAKE RESPONDIÓ
+    } catch (error) {
+        console.error("Error al conectar con Make:", error); // <-- ESTO NOS DIRÁ SI FALLÓ LA RED
+    };
 
             try {
             await fetch(MAKE_WEBHOOK_URL, { method: 'POST', body: JSON.stringify(payload) });
