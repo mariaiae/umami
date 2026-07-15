@@ -1,6 +1,6 @@
 // 1. Configuración principal
 const TU_NUMERO_WHATSAPP = "573332796527"; // Tu número con código de país 57, sin el "+"
-const MAKE_WEBHOOK_URL = ""; // (Opcional) Tu enlace de Make si decides usarlo
+const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/v70vwj2ee7mohc1caybpdju8axkzbh3s"; // (Opcional) Tu enlace de Make si decides usarlo
 
 const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
@@ -151,7 +151,7 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
 
     // Opcional: Enviar a Make para registro en Excel
     if (MAKE_WEBHOOK_URL) {
-        const payload = {
+        /*const payload = {
             cliente: customerName,
             telefono: document.getElementById('customerPhone').value,
             entrega: deliveryMethod,
@@ -163,7 +163,22 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
             await fetch(MAKE_WEBHOOK_URL, { method: 'POST', body: JSON.stringify(payload) });
         } catch (error) { 
             console.error("Error enviando a webhook", error); 
-        }
+        }*/
+
+        const payload = {
+                cliente: customerName,
+                telefono: document.getElementById('customerPhone').value,
+                entrega: deliveryMethod,
+                pago: paymentMethod,
+                total: orderState.total,
+                // Aquí incluimos las cantidades de cada producto para que coincidan con tu Excel
+                cant_mora_150: orderState.items.find(i => i.product.includes("Mermelada 150"))?.quantity || 0,
+                cant_mora_250: orderState.items.find(i => i.product.includes("Mermelada 250"))?.quantity || 0,
+                cant_aji_150: orderState.items.find(i => i.product.includes("Ají maracuyá 150"))?.quantity || 0,
+                cant_aji_250: orderState.items.find(i => i.product.includes("Ají maracuyá 250"))?.quantity || 0,
+                chai_75: orderState.items.find(i => i.product.includes("Té chai 75"))?.quantity || 0,
+                chai_125: orderState.items.find(i => i.product.includes("Té chai 125"))?.quantity || 0
+            };
     }
 
     // Generar texto automático para WhatsApp
