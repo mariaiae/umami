@@ -105,9 +105,9 @@ function updateTotal() {
     if (method === 'metro_hospital') {
         const totalQty = orderState.items.reduce((sum, item) => sum + item.quantity, 0);
         
-        if (totalQty < 5 && orderState.subtotal < 30000) {
+        if (totalQty < 5 && orderState.subtotal < 40000) {
             btnContinuar.disabled = true;
-            btnContinuar.innerText = "Mínimo 5 unid. o $30.000";
+            btnContinuar.innerText = "Mínimo 5 unid. o $40.000";
         } else {
             btnContinuar.disabled = false;
             btnContinuar.innerText = "Continuar";
