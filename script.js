@@ -150,38 +150,37 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
         : "Estación Metro";
 
     // Opcional: Enviar a Make para registro en Excel
-   // Opcional: Enviar a Make para registro en Excel
-if (MAKE_WEBHOOK_URL) {
-    const payload = {
-        cliente: customerName,
-        telefono: document.getElementById('customerPhone').value,
-        entrega: deliveryMethod,
-        pago: paymentMethod,
-        total: orderState.total,
-        items: orderState.items,
-        cant_mora_150: orderState.items.find(i => i.product.includes("Mermelada 150"))?.quantity || 0,
-        cant_mora_250: orderState.items.find(i => i.product.includes("Mermelada 250"))?.quantity || 0,
-        cant_aji_150: orderState.items.find(i => i.product.includes("Ají maracuyá 150"))?.quantity || 0,
-        cant_aji_250: orderState.items.find(i => i.product.includes("Ají maracuyá 250"))?.quantity || 0,
-        chai_75: orderState.items.find(i => i.product.includes("Té chai 75"))?.quantity || 0,
-        chai_125: orderState.items.find(i => i.product.includes("Té chai 125"))?.quantity || 0
-    };
+    if (MAKE_WEBHOOK_URL) {
+        const payload = {
+            cliente: customerName,
+            telefono: document.getElementById('customerPhone').value,
+            entrega: deliveryMethod,
+            pago: paymentMethod,
+            total: orderState.total,
+            items: orderState.items,
+            cant_mora_150: orderState.items.find(i => i.product.includes("Mermelada 150"))?.quantity || 0,
+            cant_mora_250: orderState.items.find(i => i.product.includes("Mermelada 250"))?.quantity || 0,
+            cant_aji_150: orderState.items.find(i => i.product.includes("Ají maracuyá 150"))?.quantity || 0,
+            cant_aji_250: orderState.items.find(i => i.product.includes("Ají maracuyá 250"))?.quantity || 0,
+            chai_75: orderState.items.find(i => i.product.includes("Té chai 75"))?.quantity || 0,
+            chai_125: orderState.items.find(i => i.product.includes("Té chai 125"))?.quantity || 0
+        };
 
-    console.log("Intentando enviar a Make este payload:", payload); // <-- ESTO NOS DIRÁ SI EL CÓDIGO EJECUTA EL ENVÍO
+        console.log("Intentando enviar a Make este payload:", payload);
 
-    try {
-        const response = await fetch(MAKE_WEBHOOK_URL, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload) 
-        });
-        console.log("Respuesta del servidor de Make:", response.status); // <-- ESTO NOS DIRÁ SI MAKE RESPONDIÓ
-    } catch (error) {
-        console.error("Error al conectar con Make:", error); // <-- ESTO NOS DIRÁ SI FALLÓ LA RED
+        try {
+            const response = await fetch(MAKE_WEBHOOK_URL, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload) 
+            });
+            console.log("Respuesta del servidor de Make:", response.status);
+        } catch (error) {
+            console.error("Error al conectar con Make:", error);
+        }
     }
-}
 
-// Generar texto automático para WhatsApp
+    // Generar texto automático para WhatsApp
     let waText = `¡Hola Umami! Soy *${customerName}*, acabo de registrar un pedido.\n\n`;
     waText += "*Mi pedido:*\n";
     orderState.items.forEach(i => waText += `- ${i.quantity} x ${i.product}\n`);
