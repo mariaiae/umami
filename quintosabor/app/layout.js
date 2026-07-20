@@ -1,14 +1,22 @@
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata = {
-  title: "Umami - Pedidos",
-  description: "Alimentos 100% artesanales",
+  title: "Umami - Alimentos Artesanales",
+  description: "Conservas artesanales y Té Chai 100% naturales, elaborados con amor en Medellín.",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        <Navbar user={user} />
+        {children}
+      </body>
     </html>
   );
 }

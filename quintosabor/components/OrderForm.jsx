@@ -6,7 +6,7 @@ const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/v70vwj2ee7mohc1caybpdju8axkz
 
 const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
-export default function OrderForm({ dbProducts = [] }) {
+export default function OrderForm({ dbProducts = [], user = null }) {
     const [step, setStep] = useState(1);
     
     // Obtener precios dinámicos (usamos el default si la BD está vacía)
@@ -67,6 +67,13 @@ export default function OrderForm({ dbProducts = [] }) {
     const nextStep = (targetStep) => {
         if (targetStep === 2 && subtotal === 0) {
             alert("Por favor, selecciona al menos un producto.");
+            return;
+        }
+        // Regla: más de 10 unidades requiere login
+        if (targetStep === 2 && totalQty >= 10 && !user) {
+            if (confirm("Los pedidos de 10 o más unidades requieren una cuenta.\n\n¿Quieres iniciar sesión o registrarte ahora?")) {
+                window.location.href = "/login";
+            }
             return;
         }
         setStep(targetStep);
