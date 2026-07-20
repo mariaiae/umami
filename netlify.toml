@@ -1,3 +1,0 @@
-[build]
-  base = "quintosabor"
-  command = "npm run build"
