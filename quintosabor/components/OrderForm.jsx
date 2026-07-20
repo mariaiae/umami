@@ -6,9 +6,15 @@ const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/v70vwj2ee7mohc1caybpdju8axkz
 
 const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
-export default function OrderForm() {
+export default function OrderForm({ dbProducts = [] }) {
     const [step, setStep] = useState(1);
     
+    // Obtener precios dinámicos (usamos el default si la BD está vacía)
+    const getPrice = (productName, defaultPrice) => {
+        const product = dbProducts.find(p => p.name === productName);
+        return product ? product.base_price || defaultPrice : defaultPrice; // Placeholder, en un esquema real buscaríamos en price_tiers
+    };
+
     // Step 1 State: Products
     const [cart, setCart] = useState({});
     const [aji150Variant, setAji150Variant] = useState("Picante");

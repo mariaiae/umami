@@ -1,6 +1,12 @@
 import OrderForm from "@/components/OrderForm";
+import { createClient } from "@/utils/supabase/server";
 
-export default function Home() {
+export const revalidate = 0; // Para ver siempre los datos frescos
+
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: products } = await supabase.from('products').select('*');
+
   return (
     <>
       <header className="apple-header" style={{
@@ -17,7 +23,7 @@ export default function Home() {
       </header>
 
       <main className="container">
-        <OrderForm />
+        <OrderForm dbProducts={products || []} />
       </main>
     </>
   );
