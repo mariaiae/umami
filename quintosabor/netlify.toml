@@ -1,4 +1,4 @@
 [build]
   base = "quintosabor"
   command = "npm run build"
-  publish = "quintosabor/.next"
+  publish = ".next"
